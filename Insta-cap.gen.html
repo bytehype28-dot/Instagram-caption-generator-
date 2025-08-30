@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Generate creative Instagram captions for your images and videos. Free tool for social media content creators.">
     <meta name="keywords" content="instagram caption generator, social media tool, content creation, instagram captions">
+    <meta name="author" content="Your Name">
     <title>InstaCaption Pro - AI-Powered Instagram Caption Generator</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -242,6 +243,11 @@
             padding: 30px;
             border-radius: 5px;
             margin: 0 auto;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
         }
 
         footer {
@@ -272,6 +278,16 @@
             border-radius: 5px;
             background: white;
             border-left: 3px solid #833ab4;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .caption:hover {
+            transform: translateX(5px);
+        }
+
+        .caption.selected {
+            background: #f0e6f5;
         }
 
         .caption h3 {
@@ -289,6 +305,30 @@
             margin-top: 5px;
             font-size: 0.9rem;
         }
+
+        .instructions {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 800px;
+        }
+
+        .instructions h2 {
+            color: #833ab4;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -297,6 +337,19 @@
             <h1>InstaCaption Pro</h1>
             <p>Generate engaging Instagram captions for your images and videos with AI-powered technology</p>
         </header>
+
+        <div class="instructions">
+            <h2>How to Use This Tool</h2>
+            <ol>
+                <li>Select whether you're uploading an image or video</li>
+                <li>Click the upload area to select a file from your device</li>
+                <li>Click "Generate Captions" to create captions</li>
+                <li>Select a caption style if desired</li>
+                <li>Click on a caption to select it</li>
+                <li>Click "Copy Selected Caption" to copy to clipboard</li>
+            </ol>
+            <p><strong>Note:</strong> This is a demo version. In a real application, you would connect to an AI API for caption generation.</p>
+        </div>
 
         <div class="main-content">
             <div class="upload-section">
@@ -354,9 +407,10 @@
                 <!-- Google AdSense Ad Unit -->
                 <!-- Replace with your actual AdSense code -->
                 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Example Ad Unit -->
                 <ins class="adsbygoogle"
                      style="display:block"
-                     data-ad-client="ca-pub-EXAMPLE"
+                     data-ad-client="ca-pub-example"
                      data-ad-slot="1234567890"
                      data-ad-format="auto"
                      data-full-width-responsive="true"></ins>
@@ -387,6 +441,7 @@
             
             let mediaType = 'image';
             let currentCaptionStyle = 'funny';
+            let selectedCaptionIndex = -1;
             
             // Media type selection
             imageBtn.addEventListener('click', function() {
@@ -445,6 +500,12 @@
             generateBtn.addEventListener('click', generateCaptions);
             
             function generateCaptions() {
+                // Check if a file was uploaded
+                if (!mediaUpload.files || !mediaUpload.files[0]) {
+                    alert('Please upload an image or video first');
+                    return;
+                }
+                
                 // In a real app, this would call an API or use AI
                 // For demo, we'll generate sample captions
                 
@@ -501,6 +562,7 @@
                 
                 // Clear previous captions
                 captionResult.innerHTML = '';
+                selectedCaptionIndex = -1;
                 
                 // Add new captions
                 captions[currentCaptionStyle].forEach((caption, index) => {
@@ -514,8 +576,9 @@
                     
                     // Add selection functionality
                     captionEl.addEventListener('click', function() {
-                        document.querySelectorAll('.caption').forEach(c => c.style.backgroundColor = 'white');
-                        this.style.backgroundColor = '#f0e6f5';
+                        document.querySelectorAll('.caption').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedCaptionIndex = index;
                     });
                     
                     captionResult.appendChild(captionEl);
@@ -524,29 +587,32 @@
             
             // Copy caption functionality
             copyBtn.addEventListener('click', function() {
-                const selectedCaption = captionResult.querySelector('.caption[style*="background-color: rgb(240, 230, 245)"]');
-                
-                if (selectedCaption) {
-                    const textToCopy = selectedCaption.querySelector('p').textContent + ' ' + 
-                                      selectedCaption.querySelector('.hashtags').textContent;
-                    
-                    navigator.clipboard.writeText(textToCopy)
-                        .then(() => {
-                            // Show feedback
-                            const originalText = copyBtn.textContent;
-                            copyBtn.textContent = 'Copied!';
-                            setTimeout(() => {
-                                copyBtn.textContent = originalText;
-                            }, 2000);
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy: ', err);
-                        });
-                } else {
+                if (selectedCaptionIndex === -1) {
                     alert('Please select a caption to copy');
+                    return;
                 }
+                
+                const selectedCaption = captionResult.querySelectorAll('.caption')[selectedCaptionIndex];
+                const textToCopy = selectedCaption.querySelector('p').textContent + ' ' + 
+                                  selectedCaption.querySelector('.hashtags').textContent;
+                
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        // Show feedback
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.style.background = '#4CAF50';
+                        setTimeout(() => {
+                            copyBtn.textContent = originalText;
+                            copyBtn.style.background = '#fd1d1d';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Failed to copy text. Please try again.');
+                    });
             });
         });
     </script>
 </body>
-  </html>
+</html>
