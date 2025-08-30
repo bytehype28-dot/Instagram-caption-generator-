@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Generate creative Instagram captions for your images and videos. Free tool for social media content creators.">
+    <meta name="keywords" content="instagram caption generator, social media tool, content creation, instagram captions">
+    <meta name="author" content="Your Name">
+    <title>InstaCaption Pro - AI-Powered Instagram Caption Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-section, .caption-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #833ab4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .media-type-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .media-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .media-btn.active {
+            border-color: #833ab4;
+            background: #833ab4;
+            color: white;
+        }
+
+        .media-btn i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .upload-area {
+            border: 2px dashed #833ab4;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(131, 58, 180, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: #833ab4;
+            margin-bottom: 15px;
+        }
+
+        .upload-area p {
+            color: #666;
+        }
+
+        #media-upload {
+            display: none;
+        }
+
+        .preview-container {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .preview-container img, .preview-container video {
+            width: 100%;
+            border-radius: 10px;
+            max-height: 300px;
+            object-fit: contain;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: #833ab4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .generate-btn:hover {
+            background: #6a2c92;
+            transform: translateY(-2px);
+        }
+
+        .caption-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .caption-option {
+            flex: 1;
+            min-width: 120px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .caption-option.active {
+            border-color: #833ab4;
+            background: #833ab4;
+            color: white;
+        }
+
+        .caption-result {
+            min-height: 200px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+
+        .caption-placeholder {
+            color: #999;
+            text-align: center;
+            padding: 70px 20px;
+        }
+
+        .copy-btn {
+            width: 100%;
+            padding: 15px;
+            background: #fd1d1d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: #e21a1a;
+            transform: translateY(-2px);
+        }
+
+        .ad-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 30px auto;
+            text-align: center;
+            max-width: 970px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .ad-label {
+            color: #999;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .ad-placeholder {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 5px;
+            margin: 0 auto;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.3rem;
+            }
+        }
+
+        /* Caption styles */
+        .caption {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background: white;
+            border-left: 3px solid #833ab4;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .caption:hover {
+            transform: translateX(5px);
+        }
+
+        .caption.selected {
+            background: #f0e6f5;
+        }
+
+        .caption h3 {
+            color: #833ab4;
+            margin-bottom: 5px;
+        }
+
+        .caption p {
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .hashtags {
+            color: #fd1d1d;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+
+        .instructions {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            max-width: 800px;
+        }
+
+        .instructions h2 {
+            color: #833ab4;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        .github-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #833ab4;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .github-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>InstaCaption Pro</h1>
+            <p>Generate engaging Instagram captions for your images and videos with AI-powered technology</p>
+        </header>
+
+        <div class="instructions">
+            <h2>How to Use This Tool</h2>
+            <ol>
+                <li>Select whether you're uploading an image or video</li>
+                <li>Click the upload area to select a file from your device</li>
+                <li>Click "Generate Captions" to create captions</li>
+                <li>Select a caption style if desired</li>
+                <li>Click on a caption to select it</li>
+                <li>Click "Copy Selected Caption" to copy to clipboard</li>
+            </ol>
+            <p><strong>Note:</strong> This is a demo version. In a real application, you would connect to an AI API for caption generation.</p>
+            
+            <a href="https://github.com/your-username/Instagram-caption-generator-" class="github-link" target="_blank">
+                <i class="fab fa-github"></i> View on GitHub
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="upload-section">
+                <h2 class="section-title"><i class="fas fa-upload"></i> Upload Media</h2>
+                
+                <div class="media-type-selector">
+                    <div class="media-btn active" id="image-btn">
+                        <i class="fas fa-image"></i>
+                        <span>Image</span>
+                    </div>
+                    <div class="media-btn" id="video-btn">
+                        <i class="fas fa-video"></i>
+                        <span>Video</span>
+                    </div>
+                </div>
+                
+                <div class="upload-area" id="upload-area">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Click to Upload</h3>
+                    <p>Upload your image or video to generate captions</p>
+                    <input type="file" id="media-upload" accept="image/*,video/*">
+                </div>
+                
+                <div class="preview-container" id="preview-container">
+                    <!-- Preview will be shown here -->
+                </div>
+                
+                <button class="generate-btn" id="generate-btn">Generate Captions</button>
+            </div>
+            
+            <div class="caption-section">
+                <h2 class="section-title"><i class="fas fa-comment"></i> Generated Captions</h2>
+                
+                <div class="caption-options">
+                    <div class="caption-option active" data-style="funny">Funny</div>
+                    <div class="caption-option" data-style="inspirational">Inspirational</div>
+                    <div class="caption-option" data-style="casual">Casual</div>
+                    <div class="caption-option" data-style="professional">Professional</div>
+                </div>
+                
+                <div class="caption-result" id="caption-result">
+                    <div class="caption-placeholder">
+                        <i class="fas fa-comments" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                        <p>Your generated captions will appear here</p>
+                    </div>
+                </div>
+                
+                <button class="copy-btn" id="copy-btn">Copy Selected Caption</button>
+            </div>
+        </div>
+
+        <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
+            <div class="ad-placeholder">
+                <!-- Google AdSense Ad Unit -->
+                <!-- Replace with your actual AdSense code -->
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+                <!-- Example Ad Unit -->
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-example"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 InstaCaption Pro. All rights reserved.</p>
+            <p>This tool helps content creators generate engaging Instagram captions for their posts.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const imageBtn = document.getElementById('image-btn');
+            const videoBtn = document.getElementById('video-btn');
+            const uploadArea = document.getElementById('upload-area');
+            const mediaUpload = document.getElementById('media-upload');
+            const previewContainer = document.getElementById('preview-container');
+            const generateBtn = document.getElementById('generate-btn');
+            const captionOptions = document.querySelectorAll('.caption-option');
+            const captionResult = document.getElementById('caption-result');
+            const copyBtn = document.getElementById('copy-btn');
+            
+            let mediaType = 'image';
+            let currentCaptionStyle = 'funny';
+            let selectedCaptionIndex = -1;
+            
+            // Media type selection
+            imageBtn.addEventListener('click', function() {
+                mediaType = 'image';
+                imageBtn.classList.add('active');
+                videoBtn.classList.remove('active');
+                mediaUpload.accept = 'image/*';
+            });
+            
+            videoBtn.addEventListener('click', function() {
+                mediaType = 'video';
+                videoBtn.classList.add('active');
+                imageBtn.classList.remove('active');
+                mediaUpload.accept = 'video/*';
+            });
+            
+            // Upload area click
+            uploadArea.addEventListener('click', function() {
+                mediaUpload.click();
+            });
+            
+            // Media upload preview
+            mediaUpload.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        previewContainer.style.display = 'block';
+                        if (mediaType === 'image') {
+                            previewContainer.innerHTML = `<img src="${event.target.result}" alt="Preview">`;
+                        } else {
+                            previewContainer.innerHTML = `<video src="${event.target.result}" controls></video>`;
+                        }
+                    }
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Caption style selection
+            captionOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    captionOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCaptionStyle = this.getAttribute('data-style');
+                    
+                    // If we already have captions, regenerate for new style
+                    if (captionResult.querySelector('.caption')) {
+                        generateCaptions();
+                    }
+                });
+            });
+            
+            // Generate captions
+            generateBtn.addEventListener('click', generateCaptions);
+            
+            function generateCaptions() {
+                // Check if a file was uploaded
+                if (!mediaUpload.files || !mediaUpload.files[0]) {
+                    alert('Please upload an image or video first');
+                    return;
+                }
+                
+                // In a real app, this would call an API or use AI
+                // For demo, we'll generate sample captions
+                
+                const captions = {
+                    funny: [
+                        {
+                            title: "Funny Caption",
+                            text: "I'm not lazy, I'm in energy-saving mode. 😴 #Relatable",
+                            hashtags: "#Funny #Instagram #Humor #Lifestyle"
+                        },
+                        {
+                            title: "Silly Moment",
+                            text: "My brain has too many tabs open. 🧠💥 #RelatableProblems",
+                            hashtags: "#Silly #Fun #TechHumor"
+                        }
+                    ],
+                    inspirational: [
+                        {
+                            title: "Inspirational Thought",
+                            text: "The flower that blooms in adversity is the most rare and beautiful of all. 🌸✨ #Inspiration",
+                            hashtags: "#Inspirational #Motivation #PositiveVibes"
+                        },
+                        {
+                            title: "Dream Big",
+                            text: "Your limitation—it's only your imagination. 🚀 #DreamBig",
+                            hashtags: "#Dreams #Goals #Success"
+                        }
+                    ],
+                    casual: [
+                        {
+                            title: "Casual Update",
+                            text: "Living my life one coffee at a time. ☕ #DailyLife",
+                            hashtags: "#Casual #Life #CoffeeLover"
+                        },
+                        {
+                            title: "Simple Pleasures",
+                            text: "Enjoying the little things in life. 🌼 #Happiness",
+                            hashtags: "#SimpleLife #Joy #Moments"
+                        }
+                    ],
+                    professional: [
+                        {
+                            title: "Professional Insight",
+                            text: "Success is not the key to happiness. Happiness is the key to success. #ProfessionalTips",
+                            hashtags: "#Success #Business #Leadership"
+                        },
+                        {
+                            title: "Growth Mindset",
+                            text: "Continuous improvement is better than delayed perfection. 📈 #Growth",
+                            hashtags: "#GrowthMindset #Development #Career"
+                        }
+                    ]
+                };
+                
+                // Clear previous captions
+                captionResult.innerHTML = '';
+                selectedCaptionIndex = -1;
+                
+                // Add new captions
+                captions[currentCaptionStyle].forEach((caption, index) => {
+                    const captionEl = document.createElement('div');
+                    captionEl.className = 'caption';
+                    captionEl.innerHTML = `
+                        <h3>${caption.title}</h3>
+                        <p>${caption.text}</p>
+                        <div class="hashtags">${caption.hashtags}</div>
+                    `;
+                    
+                    // Add selection functionality
+                    captionEl.addEventListener('click', function() {
+                        document.querySelectorAll('.caption').forEach(c => c.classList.remove('selected'));
+                        this.classList.add('selected');
+                        selectedCaptionIndex = index;
+                    });
+                    
+                    captionResult.appendChild(captionEl);
+                });
+            }
+            
+            // Copy caption functionality
+            copyBtn.addEventListener('click', function() {
+                if (selectedCaptionIndex === -1) {
+                    alert('Please select a caption to copy');
+                    return;
+                }
+                
+                const selectedCaption = captionResult.querySelectorAll('.caption')[selectedCaptionIndex];
+                const textToCopy = selectedCaption.querySelector('p').textContent + ' ' + 
+                                  selectedCaption.querySelector('.hashtags').textContent;
+                
+                navigator.clipboard.writeText(textToCopy)
+                    .then(() => {
+                        // Show feedback
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        copyBtn.style.background = '#4CAF50';
+                        setTimeout(() => {
+                            copyBtn.textContent = originalText;
+                            copyBtn.style.background = '#fd1d1d';
+                        }, 2000);
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        alert('Failed to copy text. Please try again.');
+                    });
+            });
+        });
+    </script>
+</body>
+  </html>
